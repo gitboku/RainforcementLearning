@@ -203,32 +203,31 @@ public class Method {
 				bandRepNum[maxInd]++;
 				
 				int bunsi =2 *bandRepNum[maxInd];
-				
 				double chi = chiarr[bandRepNum[maxInd]];
 				
 				this.averageCalc(band, bandRepNum, maxInd);
 				valueQ[maxInd] = (bunsi *bandAve[maxInd]) /chi;
 
-				this.writeToResultCsv(band, maxInd, epiNow, repNow);
-//				resultCsv[repNow] = valueQ[trueBand];
+//				this.writeToResultCsv(band, maxInd, epiNow, repNow);
+				resultCsv[repNow] = band[trueBand] - band[maxInd];//use if resultEpi
 
 				repNow++;
 			}
 			
 			for(int i=1; i<repeatNum; i++){
-				resultEpi[epiNow] += resultCsv[i];//result of each episodes
+				resultEpi[epiNow] += resultCsv[i];//Sum of 20000 regrets for an EpiNow
 			}
 
-			if(trueBand == this.searchMaxInt(bandRepNum)){				
+			if(trueBand == this.searchMaxInt(bandRepNum)){
 				correctNum++;//
 			}else{
-				System.out.println(resultEpi[epiNow]);
+//				System.out.println(resultEpi[epiNow]);
 			}
 		}
 		System.out.println("correctNum is "+ correctNum);
 		
-		return resultCsv;
-//		return resultEpi;
+//		return resultCsv;
+		return resultEpi;
 
 	}
 

@@ -8,32 +8,33 @@ public class action {
 	static int repeatNum = 20000;
 
 	static String mode = "regret";
-//		static String mode = "accRate";
-	//	static String mode="rewardVar";
-	//	static String mode="rewardAve";
+//		static String mode = "accRate";//You output "regret each agent" here
 
 	public static void main(String[] args) {
-		double aveTrue[][] = {{8.0, 5.0},
-				{0.3, 0.4},
-				{0.5, 0.6},
-				{0.7, 0.8}};
+		double aveTrue[][] = {{0.1, 0.2},
+								{0.2, 0.3},
+								{0.3, 0.4},
+								{0.4, 0.5}
+								};
 		double varTrue[] = { 1.0, 1.0};
 
 		int episode = 10000;
 
+
 		System.out.println("mode :" + mode);
 		// -------------------------------------------------------------
-		for(int i=0; i<1; i++){
+		for(int i=0; i<4; i++){
+			String ucbs ="UCB"+i+".csv";
+			String ovtk ="ovt"+i+".csv";
+			
 			Method mt = new Method(episode, repeatNum, aveTrue[i], varTrue, mode);
 			UCB ucb = new UCB(episode, repeatNum, aveTrue[i], varTrue, mode);
 
-			String ucbs ="ucbReg2.csv";
-			String ovtk ="test.csv";
-
-//			printCsv(ucbs, ucb.ucb1());
+			//When you output "regret each agent", change the CUB.java
+			printCsv(ucbs, ucb.ucb1());
 			//		printCsv("overTake", mt.overTaking(0.99865));
 			//		printCsv("T_acc.csv", mt.overTakeTuneT(0.99865));
-//			printCsv(ovtk, mt.overTakeTuneEXP(0.99865));
+//			printCsv(ovtk, mt.overTakeTuneEXP(0.99865));//write sum of regrets each agent.
 			printCsv(ovtk, mt.overTakeTuneEXP2(0.99865));
 
 		}

@@ -88,18 +88,22 @@ public class UCB {
 				}
 
 				this.writeToResultCsv(band, maxInd, epiNow, repNow);
+//				resultCsv[repNow] = band[trueBand] - band[maxInd];//use if resultEpi
 
 				repNow++;
 			}
+			
+//			for(int i=1; i<repeatNum; i++){
+//				resultEpi[epiNow] += resultCsv[i];//Sum of 20000 regrets for an EpiNow
+//			}
 
-			if(trueBand == this.searchMaxInt(bandRepNum)){
-				correctNum++;//
-			}
+			if(trueBand == this.searchMaxInt(bandRepNum)){correctNum++;}
 			
 		}
 		System.out.println("correctNum of ucb1 is "+ correctNum);
 		
 		return resultCsv;
+//		return resultEpi;
 
 	}
 	
