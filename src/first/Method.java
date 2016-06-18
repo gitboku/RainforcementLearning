@@ -33,7 +33,7 @@ public class Method {
 	}
 
 	
-	double[] overTakeTuneEXP2(double alpha){
+	double[] overTakeTuneEXP2(double alpha){//普通にエージェントの平均を出す。
 		
 		System.out.println("\nEXP2 going.");
 
@@ -53,8 +53,8 @@ public class Method {
 			chiarr[i] = csd.inverseF(beta);
 		}//[end]
 
-		Operate_Files of = new Operate_Files();
-		PrintWriter pw = of.Creating("var.csv", false);//output file of varEachRep
+//		Operate_Files of = new Operate_Files();
+//		PrintWriter pw = of.Creating("var.csv", false);//output file of varEachRep
 		
 		for (epiNow = 0; epiNow < episode; epiNow++) {
 
@@ -103,24 +103,42 @@ public class Method {
 				for(int r=0; r<bandNum; r++){
 					band[r] = -aveTrue[r] *Math.log(1.0 -mrs.nextDouble());
 					}
+				
+				//-----------------------------------------------------------softmax
+//				double sumV = 0;
+//				double tau  = 0.2;
+//				
+//				double[] valueV = new double[bandNum];
+//				for(int i=0; i<bandNum; i++){
+//					valueV[i] = Math.pow(Math.E, valueQ[i]/tau);
+//					sumV += valueV[i];
+//				}
+//				
+//				for(int i=0; i<bandNum; i++){
+//					valueV[i] /= sumV;
+//				}
+//				
+//				//softmaxのvalueV[[i]は「一番高いvalueVが最も選ばれやすい」
+//				maxInd = this.searchMax(valueV);
+				
+				//----------------------------------------------------------------
 
 				maxInd = this.searchMax(valueQ);
 				bandRepNum[maxInd]++;
 				
 				int bunsi =2 *bandRepNum[maxInd];
-				
 				double chi = chiarr[bandRepNum[maxInd]];
 				
 				//caluclate variance each trials
-				if(epiNow ==0){
-					aveEachRep[repNow] = band[trueBand] - band[maxInd];
-					bandSqur[repNow] += Math.pow(band[trueBand] - band[maxInd], 2);//Σ[X^2]
-				}else{
-					aveEachRep[repNow] += ((band[trueBand] - band[maxInd]) - aveEachRep[repNow])/ (epiNow+1);
-					bandSqur[repNow] += Math.pow(band[trueBand] - band[maxInd], 2);//Σ[X^2]
-					varEachRep[repNow] = (bandSqur[repNow] / (epiNow+1))
-							- Math.pow(aveEachRep[repNow], 2);
-				}
+//				if(epiNow ==0){
+//					aveEachRep[repNow] = band[trueBand] - band[maxInd];
+//					bandSqur[repNow] += Math.pow(band[trueBand] - band[maxInd], 2);//Σ[X^2]
+//				}else{
+//					aveEachRep[repNow] += ((band[trueBand] - band[maxInd]) - aveEachRep[repNow])/ (epiNow+1);
+//					bandSqur[repNow] += Math.pow(band[trueBand] - band[maxInd], 2);//Σ[X^2]
+//					varEachRep[repNow] = (bandSqur[repNow] / (epiNow+1))
+//							- Math.pow(aveEachRep[repNow], 2);
+//				}
 				
 				this.averageCalc(band, bandRepNum, maxInd);
 				valueQ[maxInd] = (bunsi *bandAve[maxInd]) /chi;
@@ -130,15 +148,18 @@ public class Method {
 				repNow++;
 			}
 
-			if(trueBand == this.searchMaxInt(bandRepNum)){correctNum++;}
+			if(trueBand == this.searchMaxInt(bandRepNum)){
+				correctNum++;
+				System.out.println(correctNum);
+			}
 			
 		}
 		System.out.println("correctNum is "+ correctNum);
 
-		for (int i = 0; i < repeatNum;i++){
-			pw.println(i + "," +varEachRep[i]);//output variance of each trials
-		}
-		pw.close();
+//		for (int i = 0; i < repeatNum;i++){
+//			pw.println(i + "," +varEachRep[i]);//output variance of each trials
+//		}
+//		pw.close();
 		
 		return resultCsv;
 
